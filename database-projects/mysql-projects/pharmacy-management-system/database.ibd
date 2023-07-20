@@ -1,1 +1,113 @@
-// Up for work.
+-- Create the necessary tables to store information about medicines, customers, prescriptions, and sales
+
+-- Medicines Table
+CREATE TABLE medicines (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    expiry_date DATE NOT NULL
+);
+
+-- Customers Table
+CREATE TABLE customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(20)
+);
+
+-- Prescriptions Table
+CREATE TABLE prescriptions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    medicine_id INT NOT NULL,
+    quantity INT NOT NULL,
+    date_issued DATE NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers(id),
+    FOREIGN KEY (medicine_id) REFERENCES medicines(id)
+);
+
+-- Sales Table
+CREATE TABLE sales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    prescription_id INT NOT NULL,
+    amount_paid DECIMAL(10, 2) NOT NULL,
+    sale_date DATE NOT NULL,
+    FOREIGN KEY (prescription_id) REFERENCES prescriptions(id)
+);
+
+-- Functionalities
+
+-- Add new medicine
+INSERT INTO medicines (name, quantity, price, expiry_date)
+VALUES
+    ('Paracetamol', 100, 2.5, '2024-12-31'),
+    ('Amoxicillin', 50, 5.75, '2023-10-15'),
+    ('Aspirin', 200, 1.8, '2023-08-20');
+
+-- Add new customer
+INSERT INTO customers (name, email, phone)
+VALUES
+    ('John Doe', 'john@example.com', '+1234567890'),
+    ('Jane Smith', 'jane@example.com', '+9876543210');
+
+-- Issue a prescription
+INSERT INTO prescriptions (customer_id, medicine_id, quantity, date_issued)
+VALUES
+    (1, 1, 2, '2023-07-15'),
+    (2, 3, 3, '2023-07-16');
+
+-- Record a sale
+INSERT INTO sales (prescription_id, amount_paid, sale_date)
+VALUES
+    (1, 5.0, '2023-07-15'),
+    (2, 5.4, '2023-07-17');
+
+-- Retrieve all medicines
+SELECT * FROM medicines;
+
+-- Retrieve all customers
+SELECT * FROM customers;
+
+-- Retrieve all prescriptions
+SELECT
+    p.id AS prescription_id,
+    c.name AS customer_name,
+    m.name AS medicine_name,
+    p.quantity AS prescription_quantity,
+    p.date_issued AS prescription_date
+FROM
+    prescriptions p
+    INNER JOIN customers c ON p.customer_id = c.id
+    INNER JOIN medicines m ON p.medicine_id = m.id;
+
+-- Retrieve all sales
+SELECT
+    s.id AS sale_id,
+    c.name AS customer_name,
+    m.name AS medicine_name,
+    s.amount_paid,
+    s.sale_date
+FROM
+    sales s
+    INNER JOIN prescriptions p ON s.prescription_id = p.id
+    INNER JOIN customers c ON p.customer_id = c.id
+    INNER JOIN medicines m ON p.medicine_id = m.id;
+
+-- Update medicine quantity
+UPDATE medicines
+SET quantity = 150
+WHERE id = 1;
+
+-- Delete a customer
+DELETE FROM customers
+WHERE id = 1;
+
+-- Calculate total sales for a specific date range
+SELECT
+    SUM(amount_paid) AS total_sales
+FROM
+    sales
+WHERE
+    sale_date BETWEEN '2023-01-01' AND '2023-01-31';
