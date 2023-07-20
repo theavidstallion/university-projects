@@ -1,1 +1,130 @@
-// Code will be added soon. It is available at the moment in documentation in the same sub-repository.
+CREATE TABLE
+employee (
+employee_id
+INT,
+employee_name
+VARCHAR(50),
+salesoffice_id
+INT,
+employeeContac
+t INT, Primary
+key(employee_i
+d)
+);
+INSERT INTO employee
+VALUES(1,'Saim',100,123456789); INSERT INTO
+employee VALUES(2,'Faizyab',101,987654321);
+INSERT INTO employee
+VALUES(3,'Usman',102,123459876); INSERT INTO
+employee VALUES(4,'Imran',103,543216789);
+CREATE TABLE
+P_owner(
+owner_id
+INT,
+owner_name
+VARCHAR(50)
+,
+ownerContac
+t INT,
+Primary
+key(owner_i
+d)
+ );
+INSERT INTO P_owner
+VALUES(10,'Mohsin',12345); INSERT
+INTO P_owner
+VALUES(11,'Faisal',12345); INSERT
+INTO P_owner VALUES(12,'Ali',12345);
+INSERT INTO P_owner
+VALUES(13,'Zain',12345);
+CREATE TABLE Own(
+id INT,
+percent_owned INT,
+Own_Location VARCHAR(30),
+Primary key(id),
+owner_id INT references P_owner(owner_id)
+);
+
+INSERT INTO Own VALUES(111,60,'Rawalpindi',10); INSERT INTO Own VALUES(222,80,'Islamabad',11); INSERT INTO Own VALUES(333,95,'Lahore',12); INSERT INTO Own VALUES(444,65,'Sialkot',13);
+
+CREATE TABLE
+property1 ( property_id INT,
+address VARCHAR(50)
+, city VARCHAR(100
+), state VARCHAR(100
+),
+zip_code INT,
+Primary key(property_id)
+);
+
+INSERT INTO property1 VALUES(1111,'Gulshan-e- Iqbal','Karachi','Sindh',74000); INSERT INTO property1 VALUES(1122,'G-11','Islamabad','Punjab',44000);
+INSERT INTO property1 VALUES(1133,'Defence','Islamabad','Punjab',45730); INSERT INTO property1 VALUES(1144,'Johar town','Lahore','Punjab',54782); INSERT INTO property1 VALUES(1155,'Jinnah town','Quetta','Balochistan',87312); INSERT INTO property1 VALUES(1166,'Hayatabad','Peshawar','KPK',25100);
+INSERT INTO property1 VALUES(1177,'Charbagh','Swabi','KPK',23431);
+
+CREATE TABLE
+sales_office ( office_num INT, office_location VARCHAR(100),
+Branch
+ 
+
+ 
+
+VARCHAR(50),
+Primary key(office_num)
+);
+INSERT INTO sales_office VALUES(0510000,'ISB','F-7');
+INSERT INTO sales_office VALUES(0511111,'LHR','Johar town'); INSERT INTO sales_office VALUES(0512222,'KAR','Gulshan-e-Iqbal'); INSERT INTO
+sales_office VALUES(0513333,'PES','hayatabad');
+
+CREATE TABLE
+sales_office_property_list( id INT,
+sales_office_i d INT, Primary key(id),
+property_id INT references property1(property_id)
+);
+
+INSERT INTO	sales_office_property_list VALUES(001,2211,1111);		
+INSERT INTO sales_office_property_list VALUES(002,0011,1122); 
+INSERT INTO sales_office_property_list VALUES(003,6611,1133);        
+INSERT INTO sales_office_property_list VALUES(004,9911,1144); 
+INSERT INTO sales_office_property_list VALUES(005,2299,1155);        
+INSERT INTO sales_office_property_list VALUES(006,2233,1166); 
+INSERT INTO sales_office_property_list VALUES(007,2200,1177);
+
+SELECT employee_id, employee_name FROM employee WHERE employee_id=2 AND employee_name='saim';
+
+SELECT * FROM employee
+WHERE employee_name LIKE 'F%';
+
+
+UPDATE P_owner SET
+owner_name ='Imran' WHERE
+owner_id = 10; SELECT * FROM
+P_owner
+ 
+UPDATE
+employ ee SET employ ee_id= 5
+WHERE employee_id IN
+(SELECT MIN(employee_id) FROM employee);
+
+DELETE FROM sales_office_property_list WHERE id=001; SELECT COUNT(property_id)
+FROM property1;
+SELECT employee.employee_id, Own.Own_Location FROM employee
+INNER JOIN Own ON employee.employee_id = Own.Own_Location;
+
+SELECT employee_name FROM employee UNION
+SELECT office_location FROM sales_office
+
+ALTER TABLE
+employee ADD Email VARCHAR(50
+);
+SELECT *FROM employee
+
+SELECT
+COUNT(employee_i d) FROM employee GROUP BY
+salesoffice_id HAVING
+MAX(employee_id)
+> 2;
+
+SELECT COUNT(percent_owned) AS SmallestPercent FROM Own;
+
+SELECT * FROM
+sales_office_property_list WHERE sales_office_id BETWEEN 2211 AND 2200;
